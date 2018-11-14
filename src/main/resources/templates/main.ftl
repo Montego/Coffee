@@ -7,8 +7,9 @@
     <span><a href="/user">Список пользователей</a> </span>
 </div>
 <div>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         <input type="text" name="coffee_name" placeholder="Введите название кофе" />
+        <input type="file" name="file"
         <input type="hidden" name="_csrf" value="${_csrf.token}" >
         <button type="submit">Добавить</button>
     </form>
@@ -23,6 +24,11 @@
 <div>
     <span>${coffee.name}</span>
     <strong>${coffee.authorName}</strong>
+    <div>
+        <#if coffee.filename??>
+            <img src="/img/${coffee.filename}">
+        </#if>
+    </div>
 </div>
     <#else>
 Нет кофе с таким названием
