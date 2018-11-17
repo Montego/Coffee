@@ -9,7 +9,7 @@
 <div>
     <form method="post" enctype="multipart/form-data">
         <input type="text" name="coffee_name" placeholder="Введите название кофе" />
-        <input type="file" name="file"
+        <input type="file" name="file">
         <input type="hidden" name="_csrf" value="${_csrf.token}" >
         <button type="submit">Добавить</button>
     </form>

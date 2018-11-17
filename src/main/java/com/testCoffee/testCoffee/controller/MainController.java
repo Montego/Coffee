@@ -4,6 +4,7 @@ import com.testCoffee.testCoffee.entity.Coffee;
 import com.testCoffee.testCoffee.entity.User;
 import com.testCoffee.testCoffee.repository.CoffeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,10 +13,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
+
 @Controller
 public class MainController {
 
     private final CoffeeRepository coffeeRepository;
+
+    @Value("${upload.path}")
+    private String uploadPath;
 
     @Autowired
     public MainController(CoffeeRepository coffeeRepository) {
@@ -47,12 +55,26 @@ public class MainController {
             @RequestParam("file") MultipartFile file,
             @AuthenticationPrincipal User user,
             @RequestParam String coffee_name,
-            Model model) {
+            Model model) throws IOException {
         Coffee coffee = new Coffee(coffee_name, user);
+
+        if (file != null && !file.getOriginalFilename().isEmpty()) {
+            File uploadDir = new File(uploadPath);
+
+            if (!uploadDir.exists()) {
+                uploadDir.mkdir();
+            }
+
+            String uuidFile = UUID.randomUUID().toString();
+            String resultFilename = uuidFile + "." + file.getOriginalFilename();
+            file.transferTo(new File(uploadPath + "/" + resultFilename));
+
+            coffee.setFilename(resultFilename);
+        }
         coffeeRepository.save(coffee);
         Iterable<Coffee> coffees = coffeeRepository.findAll();
         model.addAttribute("coffees", coffees);
-        return "main";
+        return "redirect:/main";
     }
 
 }

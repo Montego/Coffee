@@ -20,19 +20,21 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserRepository userRepository;
+
     @Autowired
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @GetMapping
-    public String userList(Model model){
-        model.addAttribute("users",userRepository.findAll());
+    public String userList(Model model) {
+        model.addAttribute("users", userRepository.findAll());
         return "userList";
     }
+
     @GetMapping("{user}")
-    public String userEditForm(@PathVariable User user,Model model){
-        model.addAttribute("user",user);
+    public String userEditForm(@PathVariable User user, Model model) {
+        model.addAttribute("user", user);
         model.addAttribute("roles", Role.values());
         return "userEdit";
     }
@@ -40,17 +42,17 @@ public class UserController {
     @PostMapping
     public String userSave(
             @RequestParam String username,
-            @RequestParam Map<String,String> form,
+            @RequestParam Map<String, String> form,
             @RequestParam("userId") User user
-    ){
+    ) {
         user.setUsername(username);
 
         Set<String> roles = Arrays.stream(Role.values()).map(Role::name).collect(Collectors.toSet());
 
         user.getRoles().clear();
 
-        for(String key: form.keySet()){
-            if(roles.contains(key)){
+        for (String key : form.keySet()) {
+            if (roles.contains(key)) {
                 user.getRoles().add(Role.valueOf(key));
             }
         }

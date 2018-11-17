@@ -17,6 +17,8 @@ public class Coffee {
 
     private boolean isLiked;
 
+    private String filename;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="user_id" )
     private User author;
