@@ -1,9 +1,12 @@
 package com.testCoffee.testCoffee.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -18,6 +21,9 @@ public class Coffee {
     private boolean isLiked;
 
     private String filename;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm:ss yyyy-MM-dd")
+    private LocalDateTime creationDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="user_id" )

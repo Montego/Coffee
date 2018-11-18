@@ -5,16 +5,16 @@ import com.testCoffee.testCoffee.entity.User;
 import com.testCoffee.testCoffee.repository.CoffeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Controller
@@ -56,6 +56,7 @@ public class MainController {
             @AuthenticationPrincipal User user,
             @RequestParam String coffee_name,
             Model model) throws IOException {
+
         Coffee coffee = new Coffee(coffee_name, user);
 
         if (file != null && !file.getOriginalFilename().isEmpty()) {
@@ -71,10 +72,15 @@ public class MainController {
 
             coffee.setFilename(resultFilename);
         }
+        coffee.setCreationDate(LocalDateTime.now());
         coffeeRepository.save(coffee);
         Iterable<Coffee> coffees = coffeeRepository.findAll();
         model.addAttribute("coffees", coffees);
         return "redirect:/main";
     }
 
+//    @PostMapping("{id}")
+//    public void delete(@PathVariable("id")Coffee coffee){
+//        coffeeRepository.delete(coffee);
+//    }
 }

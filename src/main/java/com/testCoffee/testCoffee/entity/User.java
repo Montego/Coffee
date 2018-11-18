@@ -1,10 +1,12 @@
 package com.testCoffee.testCoffee.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Set;
 
@@ -20,6 +22,17 @@ public class User implements UserDetails {
     private String password;
     private boolean isActive;
 
+    @Column(updatable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd  HH:mm")
+    private LocalDateTime creationDate;
+
+    public boolean isAdmin(){
+        return roles.contains(Role.ADMIN);
+    }
+
+    public boolean isModerator(){
+        return roles.contains(Role.MODERATOR);
+    }
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
