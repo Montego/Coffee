@@ -22,6 +22,10 @@ public class User implements UserDetails {
     private String password;
     private boolean isActive;
 
+    private String email;
+
+    private String activationCode;
+
     @Column(updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd  HH:mm")
     private LocalDateTime creationDate;

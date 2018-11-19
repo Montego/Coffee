@@ -1,21 +1,17 @@
 package com.testCoffee.testCoffee.controller;
 
-import com.testCoffee.testCoffee.entity.Role;
 import com.testCoffee.testCoffee.entity.User;
-import com.testCoffee.testCoffee.repository.UserRepository;
+import com.testCoffee.testCoffee.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.time.LocalDateTime;
-import java.util.Collections;
-
 @Controller
 public class RegistrationController {
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @GetMapping("/registration")
     public String registration() {
@@ -24,17 +20,13 @@ public class RegistrationController {
 
     @PostMapping("/registration")
     public String addUser(User user, Model model) {
-        User userFromDb = userRepository.findByUsername(user.getUsername());
 
-        if (userFromDb != null) {
+
+        if (!userService.addUser(user)) {
             model.addAttribute("message", "User exists!");
             return "registration";
         }
 
-        user.setActive(true);
-        user.setRoles(Collections.singleton(Role.USER));
-        user.setCreationDate(LocalDateTime.now());
-        userRepository.save(user);
 
         return "redirect:/login";
     }
