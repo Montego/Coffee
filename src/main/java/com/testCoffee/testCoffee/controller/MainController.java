@@ -79,8 +79,8 @@ public class MainController {
         return "redirect:/main";
     }
 
-    @PostMapping
-    public void delete(@PathVariable("id")Coffee coffee){
-        coffeeRepository.delete(coffee);
-    }
+//    @PostMapping
+//    public void delete(@RequestParam("coffee_id") Coffee coffee){
+//        coffeeRepository.delete(coffee);
+//    }
 }

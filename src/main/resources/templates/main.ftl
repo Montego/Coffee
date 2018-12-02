@@ -65,7 +65,12 @@
                 </td>
                 <td>
                     <a href="/coffee/${coffee.id}">edit</a>
-                    <a href="/coffee/${coffee.id}">delete</a>
+                    <#--<button type="submit" class=".js-button">delete</button>-->
+                    <form method="POST">
+                        <input type="hidden" name="coffee_id" value="${coffee.id}" />
+                        <button type="submit" class=".js-button">delete</button>
+                    </form>
+                    <#--<a href="/coffee/${coffee.id}">delete</a>-->
                 </td>
             </tr>
         <#else>
